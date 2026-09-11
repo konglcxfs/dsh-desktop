@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { expect, it } from 'vitest'
-import { prepareDesktopProfile } from '../src/profile.ts'
+import { ASTRAWORKS_BUNDLE_NAME, prepareDesktopProfile } from '../src/profile.ts'
 import { desktopReleaseUserDataLocations } from '../src/profile-channel-admission.ts'
 import { installDesktopPnpmRuntime } from '../src/desktop-runtime-environment.ts'
 import { HostRpc } from '../src/host-rpc.ts'
@@ -90,6 +90,11 @@ it.each([false, true])('boots a separate Web Host with client plugins (AA enable
     const match = html.match(/(?:window\.__DSH_BOOT__|globalThis\["__DSH_BOOT__"\]) = (\{.*?\})<\/script>/u)
     expect(match).not.toBeNull()
     const graph = JSON.parse(match![1]!) as { entries: { id: string; url: string }[] }
+    const astraWorksEntry = graph.entries.find(entry => entry.id === ASTRAWORKS_BUNDLE_NAME)
+    expect(astraWorksEntry).toBeDefined()
+    const astraWorksBundle = await fetch(new URL(astraWorksEntry!.url, spec.url), { headers: { ...headers, Cookie: cookie } })
+    expect(astraWorksBundle.status).toBe(200)
+    expect(await astraWorksBundle.text()).toContain('AstraWorks')
     const pluginEntry = graph.entries.find(entry => entry.id === 'isolated-client-fixture')
     expect(pluginEntry).toBeDefined()
     const bundle = await fetch(new URL(pluginEntry!.url, spec.url), { headers: { ...headers, Cookie: cookie } })
