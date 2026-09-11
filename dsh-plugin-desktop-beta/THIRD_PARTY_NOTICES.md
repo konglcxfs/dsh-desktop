@@ -8,7 +8,7 @@ the package names, versions, and licenses for transparency.
 | @agents-anywhere/dsh-bridge-next | 0.1.0-dev.0.desktop.c00df092c98b2.rcda81994 | MIT |
 | @anthropic-ai/sdk | 0.123.0 | MIT |
 | @astraworks/agent-kit | 0.1.2 | SEE LICENSE IN LICENSE |
-| @astraworks/dsh-astraworks | 0.1.4 | SEE LICENSE IN LICENSE |
+| @astraworks/dsh-astraworks | 0.1.5 | SEE LICENSE IN LICENSE |
 | @aws-crypto/sha256-browser | 5.2.0 | Apache-2.0 |
 | @aws-crypto/sha256-js | 5.2.0 | Apache-2.0 |
 | @aws-crypto/supports-web-crypto | 5.2.0 | Apache-2.0 |
