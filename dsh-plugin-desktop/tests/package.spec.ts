@@ -186,7 +186,7 @@ describe('published package surface', () => {
 
   it('pins AstraWorks and both selectable Market providers in the published runtime', () => {
     expect(manifest.dependencies).toMatchObject({
-      '@astraworks/dsh-astraworks': '0.1.3',
+      '@astraworks/dsh-astraworks': '0.1.4',
       'dsh-community-market': '0.1.0-dev.0',
       dshmarket: '1.38.1',
     })
