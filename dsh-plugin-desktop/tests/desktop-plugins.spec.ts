@@ -22,6 +22,7 @@ import {
   type DesktopPluginsBootstrap,
 } from '../src/desktop-plugins.ts'
 import {
+  ASTRAWORKS_BUNDLE_NAME,
   desktopInstallAnchor,
   ensureDesktopProfile,
   prepareDesktopProfile,
@@ -135,6 +136,9 @@ describe('desktop direct bundle management', () => {
     )
     expect(first.find(item => item.packageName === '@deepseek-ai/dsh-web-app')).toEqual(
       expect.objectContaining({ status: 'active', mutable: false }),
+    )
+    expect(first.find(item => item.packageName === ASTRAWORKS_BUNDLE_NAME)).toEqual(
+      expect.objectContaining({ status: 'active', mutable: true, uninstallable: false }),
     )
     expect(desktopPluginBundleMutable('dsh-plugin-desktop')).toBe(false)
     expect(desktopPluginBundleMutable('dsh-community-market')).toBe(false)

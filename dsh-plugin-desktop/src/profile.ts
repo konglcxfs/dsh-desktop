@@ -88,8 +88,9 @@ export const DESKTOP_PROFILE_ROOT = 'cordis.yml'
 
 const AA_PACKAGE_NAME = '@agents-anywhere/dsh-bridge-next'
 const AA_ROW_ID = 'agents-anywhere-bridge-next'
+export const ASTRAWORKS_BUNDLE_NAME = '@astraworks/dsh-astraworks'
 const BIN_NAME = DESKTOP_PACKAGE_NAME
-const REQUIRED_BUNDLES = requiredWebBundles()
+const REQUIRED_BUNDLES = [...requiredWebBundles(), ASTRAWORKS_BUNDLE_NAME]
 const REQUIRED_BUNDLE_SET = new Set(REQUIRED_BUNDLES)
 const OBSOLETE_DESKTOP_BUNDLE_SET = new Set(['@deepseek-ai/dsh-desktop-app'])
 // Electron's patched fs/module APIs read this logical ASAR path directly. The

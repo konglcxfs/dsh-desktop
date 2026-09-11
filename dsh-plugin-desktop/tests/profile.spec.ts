@@ -20,6 +20,7 @@ import {
 } from '@deepseek-ai/dsh-app-boot'
 import { retainAsarModuleResolver } from '../src/asar-module-resolver-state.ts'
 import {
+  ASTRAWORKS_BUNDLE_NAME,
   DESKTOP_PACKAGE_NAME,
   desktopShellModeFromSettings,
   desktopStartupSettingsFromSettings,
@@ -217,6 +218,7 @@ describe('desktop profile composition', {
     ])).toEqual([
       '@deepseek-ai/dsh-base',
       '@deepseek-ai/dsh-web-app',
+      ASTRAWORKS_BUNDLE_NAME,
       'third-party-one',
       'third-party-two',
     ])
@@ -243,6 +245,7 @@ describe('desktop profile composition', {
     expect(repaired.dsh.profile.bundles).toEqual([
       '@deepseek-ai/dsh-base',
       '@deepseek-ai/dsh-web-app',
+      ASTRAWORKS_BUNDLE_NAME,
       'third-party-plugin',
     ])
     expect(repaired.dependencies).toEqual({ 'third-party-plugin': '^1.2.3' })
@@ -274,6 +277,7 @@ describe('desktop profile composition', {
     expect(repaired.dsh.profile.bundles).toEqual([
       '@deepseek-ai/dsh-base',
       '@deepseek-ai/dsh-web-app',
+      ASTRAWORKS_BUNDLE_NAME,
     ])
   })
 

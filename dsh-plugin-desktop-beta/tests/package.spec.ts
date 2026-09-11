@@ -210,8 +210,9 @@ describe('published package surface', () => {
     expect(readFileSync(new URL('cordis.patch.yml', packageRoot), 'utf8')).toContain('name: dsh-plugin-desktop-beta/updates')
   })
 
-  it('pins both selectable Market providers in the published runtime', () => {
+  it('pins AstraWorks and both selectable Market providers in the published runtime', () => {
     expect(manifest.dependencies).toMatchObject({
+      '@astraworks/dsh-astraworks': '0.1.0',
       'dsh-community-market': '0.1.0-dev.0',
       dshmarket: '1.38.1',
     })
