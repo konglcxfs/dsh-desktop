@@ -11,7 +11,7 @@ import {
 } from 'node:fs'
 import { createRequire } from 'node:module'
 import { tmpdir } from 'node:os'
-import { join } from 'node:path'
+import { dirname, join } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { rgPath } from '@vscode/ripgrep'
 import AdmZip from 'adm-zip'
@@ -103,6 +103,41 @@ async function smokeDiagnosticExportWorker(): Promise<void> {
       `diagnostic Worker omitted ${crashEntry}`,
     )
   } finally {
+    rmSync(root, { recursive: true, force: true })
+  }
+}
+
+/** Exercise AstraWorks project initialization against Skill sources inside ASAR. */
+async function smokeAstraWorksProjectInitialization(): Promise<void> {
+  const root = mkdtempSync(join(tmpdir(), 'dsh-packaged-astraworks-'))
+  const projectRoot = join(root, 'project')
+  const previousHome = process.env.ASTRAWORKS_HOME
+  process.env.ASTRAWORKS_HOME = join(root, 'home')
+  mkdirSync(projectRoot)
+  const pluginManifest = createRequire(installAnchor).resolve('@astraworks/dsh-astraworks/package.json')
+  const embeddedModule = await import(pathToFileURL(
+    join(dirname(pluginManifest), 'runtime', 'embed', 'index.mjs'),
+  ).href) as { createEmbeddedAstraWorks?: (options: { host: string }) => {
+    ensureProject: (path: string) => Promise<unknown>
+    close: () => Promise<void>
+  } }
+  assert(
+    typeof embeddedModule.createEmbeddedAstraWorks === 'function',
+    'could not load the AstraWorks embedded runtime',
+  )
+  const runtime = embeddedModule.createEmbeddedAstraWorks({ host: 'dsh-packaged-smoke' })
+  try {
+    await runtime.ensureProject(projectRoot)
+    const skillRoot = join(projectRoot, '.agents', 'skills', 'agent-builder')
+    assert(existsSync(join(skillRoot, 'SKILL.md')), 'did not install agent-builder/SKILL.md from ASAR')
+    assert(
+      existsSync(join(skillRoot, 'references', 'testing-and-evaluation.md')),
+      'did not recursively install agent-builder references from ASAR',
+    )
+  } finally {
+    await runtime.close()
+    if (previousHome === undefined) delete process.env.ASTRAWORKS_HOME
+    else process.env.ASTRAWORKS_HOME = previousHome
     rmSync(root, { recursive: true, force: true })
   }
 }
@@ -220,5 +255,6 @@ try {
 
 await smokeSessionMigration()
 await smokeDiagnosticExportWorker()
+await smokeAstraWorksProjectInitialization()
 
 process.stdout.write(OK_MARKER)
