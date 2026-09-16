@@ -69,7 +69,11 @@ const PNPM_RUNTIME_VERSION = packageVersion(PNPM_PACKAGE_ROOT)
 export const MAX_UNPACKED_RUNTIME_FILES = 1_500
 
 /** Maximum physical payload accepted beside ASAR after smart unpack. */
-export const MAX_UNPACKED_RUNTIME_BYTES = 128 * 1024 * 1024
+export const MAX_UNPACKED_RUNTIME_BYTES = 160 * 1024 * 1024
+
+/** Narrow ceiling for the reviewed cross-architecture uv executable payload. */
+export const MAX_UV_SMART_UNPACK_FILES = 8
+export const MAX_UV_SMART_UNPACK_BYTES = 96 * 1024 * 1024
 
 /** Narrow ceiling for pnpm's smart-unpacked native-helper package root. */
 export const MAX_PNPM_SMART_UNPACK_FILES = 32
@@ -88,6 +92,7 @@ export const ALLOWED_SMART_UNPACK_PACKAGE_ROOTS = [
 
 /** Platform package families selected by native dependencies at package time. */
 export const ALLOWED_SMART_UNPACK_PACKAGE_PREFIXES = [
+  'node_modules/@dataiku/uv-',
   'node_modules/@deepseek-ai/node-addon-system-',
   'node_modules/@img/sharp-',
   'node_modules/@koromix/koffi-',
@@ -703,6 +708,19 @@ export function verifySelectiveUnpackedRuntime(
     throw new Error(
       `dsh-plugin-desktop: unpacked runtime at ${unpackedRoot} exceeds pnpm smart-unpack budget `
       + `${String(MAX_PNPM_SMART_UNPACK_FILES)} files/${String(MAX_PNPM_SMART_UNPACK_BYTES)} bytes; `
+      + `inventory: ${inventory}`,
+    )
+  }
+  const uv = summary.groups
+    .filter(group => group.root.startsWith('node_modules/@dataiku/uv-'))
+    .reduce((total, group) => ({
+      files: total.files + group.files,
+      bytes: total.bytes + group.bytes,
+    }), { files: 0, bytes: 0 })
+  if (uv.files > MAX_UV_SMART_UNPACK_FILES || uv.bytes > MAX_UV_SMART_UNPACK_BYTES) {
+    throw new Error(
+      `dsh-plugin-desktop: unpacked runtime at ${unpackedRoot} exceeds uv smart-unpack budget `
+      + `${String(MAX_UV_SMART_UNPACK_FILES)} files/${String(MAX_UV_SMART_UNPACK_BYTES)} bytes; `
       + `inventory: ${inventory}`,
     )
   }

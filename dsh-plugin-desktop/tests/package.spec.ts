@@ -186,7 +186,7 @@ describe('published package surface', () => {
 
   it('pins AstraWorks and both selectable Market providers in the published runtime', () => {
     expect(manifest.dependencies).toMatchObject({
-      '@astraworks/dsh-astraworks': '0.1.6',
+      '@astraworks/dsh-astraworks': '0.1.8',
       'dsh-community-market': '0.1.0-dev.0',
       dshmarket: '1.38.1',
     })
@@ -897,6 +897,7 @@ describe('published package surface', () => {
       x64ArchFiles: expect.stringContaining('node-pty/prebuilds/darwin-*'),
     }))
     expect(manifest.build?.files).toContain('!node_modules/node-pty/build/**')
+    expect(manifest.build?.mac?.x64ArchFiles).toContain('@dataiku/uv-darwin-*')
     expect(manifest.devDependencies?.['@electron/asar']).toBe('3.4.1')
     expect(manifest.devDependencies?.['@electron/fuses']).toBe('1.8.0')
   })

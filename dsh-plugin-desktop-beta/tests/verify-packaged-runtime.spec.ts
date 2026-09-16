@@ -19,6 +19,8 @@ import {
   listDesktopRuntimeEntries,
   MAX_PNPM_SMART_UNPACK_BYTES,
   MAX_PNPM_SMART_UNPACK_FILES,
+  MAX_UV_SMART_UNPACK_BYTES,
+  MAX_UV_SMART_UNPACK_FILES,
   MAX_UNPACKED_RUNTIME_BYTES,
   MAX_UNPACKED_RUNTIME_FILES,
   REQUIRED_AGENT_PRESET_RUNTIME_ENTRIES,
@@ -551,8 +553,32 @@ describe('packaged desktop runtime verification', () => {
     expect(ALLOWED_SMART_UNPACK_PACKAGE_ROOTS).toContain('node_modules/fs-ext')
     expect(ALLOWED_SMART_UNPACK_PACKAGE_ROOTS).toContain('node_modules/node-pty')
     expect(ALLOWED_SMART_UNPACK_PACKAGE_ROOTS).toContain('node_modules/pnpm')
+    expect(ALLOWED_SMART_UNPACK_PACKAGE_PREFIXES).toContain('node_modules/@dataiku/uv-')
     expect(ALLOWED_SMART_UNPACK_PACKAGE_PREFIXES).toContain('node_modules/@vscode/ripgrep-')
     expect(ALLOWED_SMART_UNPACK_PACKAGE_PREFIXES).toContain('node_modules/@img/sharp-')
+  })
+
+  it('accepts both reviewed uv executables within their dedicated budget', () => {
+    const files = [
+      { path: 'node_modules/@dataiku/uv-darwin-arm64/bin/uv', bytes: 39 * 1024 * 1024 },
+      { path: 'node_modules/@dataiku/uv-darwin-x64/bin/uv', bytes: 46 * 1024 * 1024 },
+    ]
+    expect(() => verifySelectiveUnpackedRuntime(
+      asarIndex(files.map(file => file.path)),
+      '/build/resources/app.asar.unpacked',
+      files,
+    )).not.toThrow()
+  })
+
+  it('caps reviewed uv platform packages independently of the full payload budget', () => {
+    const expectedBudget = `${String(MAX_UV_SMART_UNPACK_FILES)} files/`
+      + `${String(MAX_UV_SMART_UNPACK_BYTES)} bytes`
+    const path = 'node_modules/@dataiku/uv-darwin-arm64/bin/uv'
+    expect(() => verifySelectiveUnpackedRuntime(
+      asarIndex([path]),
+      '/build/resources/app.asar.unpacked',
+      [{ path, bytes: MAX_UV_SMART_UNPACK_BYTES + 1 }],
+    )).toThrow(`uv smart-unpack budget ${expectedBudget}`)
   })
 
   it('accepts pnpm as an indivisible smart-unpacked package with native helpers', () => {
