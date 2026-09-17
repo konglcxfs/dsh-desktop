@@ -127,9 +127,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@astraworks/dsh-astraworks@npm:0.1.16":
-  version: 0.1.16
-  resolution: "@astraworks/dsh-astraworks@npm:0.1.16"
+"@astraworks/dsh-astraworks@npm:0.1.18":
+  version: 0.1.18
+  resolution: "@astraworks/dsh-astraworks@npm:0.1.18"
   dependencies:
     "@astraworks/agent-kit": "npm:0.1.3"
   peerDependencies:
@@ -137,7 +137,7 @@ __metadata:
   peerDependenciesMeta:
     "@deepseek-ai/dsh":
       optional: true
-  checksum: 10c0/2f0e47d2f1d004b1dd7d7c06851022f12a83140573d3b0bb298a0cd7b545885c3a8130958ad3239d6b7e8684d213ba4057dd029bceaabf15f435bc5265ca1aba
+  checksum: 10c0/464fff66a1c8db8e30f008a6ecb49df4977a25a0be1cee43901af650f67c8dc61dcd0b8646e058d4fc4b024e6d1aaf2fff44a14c5ef35f3bca292be721baa4b1
   languageName: node
   linkType: hard
 
@@ -8998,7 +8998,7 @@ __metadata:
   resolution: "dsh-plugin-desktop-beta@workspace:dsh-plugin-desktop-beta"
   dependencies:
     "@agents-anywhere/dsh-bridge-next": "file:../vendor/agents-anywhere/agents-anywhere-dsh-bridge-next-0.1.0-dev.0.desktop.ce53016f05be0.rcda81994.tgz"
-    "@astraworks/dsh-astraworks": "npm:0.1.16"
+    "@astraworks/dsh-astraworks": "npm:0.1.18"
     "@base-ui/react": "npm:^1.7.0"
     "@deepseek-ai/cordis": "npm:4.0.2"
     "@deepseek-ai/cordis-plugin-group": "npm:1.0.2"
@@ -9196,7 +9196,7 @@ __metadata:
   resolution: "dsh-plugin-desktop@workspace:dsh-plugin-desktop"
   dependencies:
     "@agents-anywhere/dsh-bridge-next": "file:../vendor/agents-anywhere/agents-anywhere-dsh-bridge-next-0.1.0-dev.0.desktop.ce53016f05be0.rcda81994.tgz"
-    "@astraworks/dsh-astraworks": "npm:0.1.16"
+    "@astraworks/dsh-astraworks": "npm:0.1.18"
     "@base-ui/react": "npm:^1.7.0"
     "@deepseek-ai/cordis": "npm:4.0.2"
     "@deepseek-ai/cordis-plugin-group": "npm:1.0.2"
